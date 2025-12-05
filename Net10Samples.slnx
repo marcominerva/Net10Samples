@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".github/copilot-instructions.md" />
+    <File Path="Directory.Build.props" />
+  </Folder>
+  <Project Path="AspNetCore10Sample/AspNetCore10Sample.csproj" Id="a682ef9c-b5be-41c2-b0f5-38e71f194df2" />
+  <Project Path="EntityFrameworkCore10Sample/EntityFrameworkCore10Sample.csproj" Id="255c3705-534d-447b-83ad-1395593594f0" />
+  <Project Path="Net10Sample/Net10Sample.csproj" />
+</Solution>
