@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-using Microsoft.OpenApi;
+using System.Runtime.CompilerServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +36,21 @@ app.UseSwaggerUI(options =>
 app.MapPost("/api/customers", CustomerEndpoints.Create)
     .Produces(StatusCodes.Status201Created)
     .ProducesValidationProblem();
+
+app.MapGet("/api/stockprices", (CancellationToken cancellationToken) =>
+{
+    static async IAsyncEnumerable<StockPrice> GetStockPrices([EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            var stockPrice = new StockPrice(Math.Round(Random.Shared.NextDouble() * 100, 2), DateTime.UtcNow);
+            yield return stockPrice;
+            await Task.Delay(2000, cancellationToken);
+        }
+    }
+
+    return TypedResults.ServerSentEvents(GetStockPrices(cancellationToken), eventType: "stockUpdates");
+});
 
 app.Run();
 
@@ -101,3 +116,5 @@ public class CreateCustomerRequest
     [Range(0, 1.0D)]
     public double BaseDiscount { get; set; }
 }
+
+public record class StockPrice(double Value, DateTime DateTime);
